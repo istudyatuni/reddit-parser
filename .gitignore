@@ -6,4 +6,3 @@ errors.txt
 *.json
 *.sublime-workspace
 *.csv
-get-json.py
