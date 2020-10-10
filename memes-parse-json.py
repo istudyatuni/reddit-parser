@@ -1,32 +1,14 @@
 import re
 import json
 import requests
-import shutil # to save it locally
 import os
+import csv
 
-from functions import url_to_i_reddit_link, add_link_to_html_file, down_image
+from functions import url_to_i_reddit_link, add_link_to_html_file, down_image, write_if_not_exist_in_csv, write_style
 
-subreddit = 'pikabu'
+subreddit = 'memes'
 sorting = 'hot'
-limit = '50'
-
-style = '''<style>
-	body {
-		font-family: Noto Sans, Arial, sans-serif;
-	}
-	img {
-		width: 40em;
-		margin: auto auto 2em 20%;
-	}
-	p {
-		margin-left: 20%;
-	}
-	.fix {
-		position: fixed;
-		bottom: 1em;
-		right: 5em;
-	}
-</style>\n'''
+limit = '500'
 
 print('Subreddit: r/' + subreddit + '\nSorting:', sorting + '\nLimit =', limit)
 
@@ -45,29 +27,40 @@ memes = json.loads(requests.get(url, headers = user_agent).text)
 
 # ------------------------------------------
 
-memes_file = open(subreddit + '-' + sorting + '.html', 'w', encoding='utf8')
-memes_file.write(style)
+posts_file = open(subreddit + '-' + sorting + '.html', 'w', encoding='utf8', newline='\n')
+write_style(posts_file)
 
-params = []
+titles_file = open(folder + '-titles.csv', 'a', newline='\n')
+title_writer = csv.writer(titles_file, delimiter='|')
+
+csv_file = open(folder + '-titles.csv', 'r')
+
+titles = []
+for row in csv.reader(csv_file, delimiter='|'):
+	try:
+		titles.append(row[0])
+	except Exception as e: pass
+
 count = 0
 for element in memes['data']['children']:
 	title = element['data']['title']
+	ups = element['data']['ups']
 
 	try:
 		url = element['data']['preview']['images'][0]['source']['url']
 	except Exception as e: pass
 
+	jpg = 'No image'
 	jpg = re.search(regexp, url)
 	if jpg == None:
 		continue
 	jpg = jpg[0].replace('/', '')
 
-	param = { 'title': title, 'filename': jpg }
-	params.append(param)
+	write_if_not_exist_in_csv(jpg, title, title_writer, titles)
 
 	link = url_to_i_reddit_link(jpg)
 	down_image(link, folder, jpg)
-	add_link_to_html_file(title, memes_file, folder + '/' + jpg, jpg)
+	add_link_to_html_file(title, ups, posts_file, folder + '/' + jpg, jpg)
 	count += 1
 	print('Download\t' + str(count), end='\r')
 
@@ -79,5 +72,6 @@ for image in images:
 	# add_link_to_html_file()
 	pass
 
-memes_file.write('<span class="fix">'+ str(count) + ' posts</span>\n')
-memes_file.close()
+posts_file.write('<span class="fix">'+ str(count) + ' posts</span>\n')
+posts_file.close()
+titles_file.close()
