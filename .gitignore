@@ -4,3 +4,4 @@ __pycache__
 *.html
 errors.txt
 *.json
+*.sublime-workspace
