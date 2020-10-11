@@ -2,35 +2,20 @@ import os
 import requests
 import shutil # to save image locally
 
-style = '''<style>
-    body {
-        font-family: Noto Sans, Arial, sans-serif;
-        background-color: #4a4a4a;
-        color: white;
-    }
-    img {
-        width: 40em;
-        margin: auto auto 2em 20%;
-    }
-    p {
-        margin-left: 20%;
-    }
-    .fix {
-        position: fixed;
-        bottom: 1em;
-        right: 5em;
-    }
-</style>\n'''
-
 def write_style(file):
-    file.write(style)
+    file.write('<link rel="stylesheet" href="style.css">')
+
+def write_header(file, sub, sort):
+    a = '<h2><span class="sub">'+ sub + '</span> ' + sort + '</h2>'
+    file.write(a)
 
 def url_to_i_reddit_link(jpg):
     # print(jpg)
     return 'https://i.redd.it/' + jpg
 
-def add_link_to_html_file(title, ups, html_file, folder, file_name):
-    a = '<p>' + title + '</p><p>' + str(ups) + ' upvotes</p>\n<img src="' + folder + '" alt="' + file_name + '">\n'
+def add_link_to_html_file(title, ups, html_file, path, alt):
+    a = '<a href="' + alt + '" target="_blank"><span class="ups">' + str(ups) + ' upvotes</span>' + title + '</a>\n'
+    a += '<img src="' + path + '" alt="' + alt + '">\n'
     html_file.write(a)
 
 error_file = open('errors.txt', 'a')

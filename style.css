@@ -1,0 +1,30 @@
+body {
+    font-family: Noto Sans, Arial, sans-serif;
+    background-color: #4a4a4a;
+    color: white;
+}
+a, img, h2 {
+    margin-left: 20%;
+}
+img {
+    width: 40em;
+    margin-bottom: 2em;
+}
+a {
+    margin-bottom: 1em;
+    text-decoration: none;
+    color: #9D90FF;
+    display: block;
+}
+.ups {
+    color: white;
+    margin-right: 2em;
+}
+.fix {
+    position: fixed;
+    bottom: 1em;
+    right: 5em;
+}
+.sub {
+    color: #ff5700;
+}

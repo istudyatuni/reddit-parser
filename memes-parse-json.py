@@ -4,7 +4,7 @@ import requests
 import os
 import csv
 
-from functions import url_to_i_reddit_link, add_link_to_html_file, down_image, write_if_not_exist_in_csv, write_style
+from functions import url_to_i_reddit_link, add_link_to_html_file, down_image, write_if_not_exist_in_csv, write_style, write_header
 
 subreddit = 'memes'
 sorting = 'hot'
@@ -29,6 +29,7 @@ memes = json.loads(requests.get(url, headers = user_agent).text)
 
 posts_file = open(subreddit + '-' + sorting + '.html', 'w', encoding='utf8', newline='\n')
 write_style(posts_file)
+write_header(posts_file, 'r/' + subreddit, sorting)
 
 titles_file = open(folder + '-titles.csv', 'a', newline='\n')
 title_writer = csv.writer(titles_file, delimiter='|')
@@ -60,7 +61,7 @@ for element in memes['data']['children']:
 
 	link = url_to_i_reddit_link(jpg)
 	down_image(link, folder, jpg)
-	add_link_to_html_file(title, ups, posts_file, folder + '/' + jpg, jpg)
+	add_link_to_html_file(title, ups, posts_file, folder + '/' + jpg, link)
 	count += 1
 	print('Download\t' + str(count), end='\r')
 
