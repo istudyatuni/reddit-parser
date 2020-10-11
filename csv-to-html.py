@@ -1,7 +1,7 @@
 import re
 import csv
 
-from functions import write_style, add_link_to_html_file
+from functions import write_style, add_link_to_html_file, url_to_i_reddit_link
 
 subreddit = 'pikabu'
 sorting = 'hot'
@@ -19,7 +19,7 @@ for row in title_reader:
     file = row[0]
     title = row[1]
     ups = row[2]
-    add_link_to_html_file(title, ups, html_file, folder + '/' + file, folder + '/' + file)
+    add_link_to_html_file(title, ups, html_file, folder + '/' + file, url_to_i_reddit_link(file))
     count += 1
 
 html_file.write('<span class="fix">'+ str(count) + ' posts</span>\n')
