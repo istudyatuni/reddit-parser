@@ -54,11 +54,14 @@ def json_to_html(subreddit, sorting, json_data, cont = False, count = 0):
             continue
         jpg = jpg[0].replace('/', '')
 
-        write_if_not_exist_in_csv(jpg, title, ups, title_writer, titles)
-
         link = url_to_i_reddit_link(jpg)
+        permalink = link
+        permalink = 'https://reddit.com' + element['data']['permalink']
+
+        write_if_not_exist_in_csv(jpg, title, ups, permalink, title_writer, titles)
+
         down_image(link, 'web/' + folder, jpg)
-        add_link_to_html_file(title, ups, posts_file, folder + '/' + jpg, link)
+        add_link_to_html_file(title, ups, posts_file, folder + '/' + jpg, permalink)
         count += 1
         print('Download\t' + str(count), end='\r')
 

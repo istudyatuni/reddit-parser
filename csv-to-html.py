@@ -19,7 +19,9 @@ for row in title_reader:
     file = row[0]
     title = row[1]
     ups = row[2]
-    add_link_to_html_file(title, ups, html_file, folder + '/' + file, url_to_i_reddit_link(file))
+    permalink = row[3]
+
+    add_link_to_html_file(title, ups, html_file, folder + '/' + file, permalink)
     count += 1
 
 html_file.write('<span class="fix">'+ str(count) + ' posts</span>\n')

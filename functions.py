@@ -4,6 +4,7 @@ import shutil # to save image locally
 
 def write_style(file):
     a = '<meta content="width=device-width, initial-scale=1" name="viewport" />\n'
+    a += '<meta name="theme-color" content="#4a4a4a" />\n'
     a += '<link rel="stylesheet" href="style.css">\n'
     file.write(a)
 
@@ -46,9 +47,9 @@ def down_image(image_url, folder, filename):
 def write_only_file(name):
     pass
 
-def write_if_not_exist_in_csv(name, title, ups, writer, titles):
+def write_if_not_exist_in_csv(name, title, ups, permalink, writer, titles):
     for row in titles:
         if title == name:
             return
 
-    writer.writerow([name, title, ups])
+    writer.writerow([name, title, ups, permalink])
