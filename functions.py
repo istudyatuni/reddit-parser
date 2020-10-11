@@ -3,7 +3,7 @@ import requests
 import shutil # to save image locally
 
 def write_style(file):
-    file.write('<link rel="stylesheet" href="style.css">')
+    file.write('<link rel="stylesheet" href="style.css">\n')
 
 def write_header(file, sub, sort):
     a = '<h2><span class="sub">'+ sub + '</span> ' + sort + '</h2>'
@@ -44,9 +44,9 @@ def down_image(image_url, folder, filename):
 def write_only_file(name):
     pass
 
-def write_if_not_exist_in_csv(name, title, writer, titles):
+def write_if_not_exist_in_csv(name, title, ups, writer, titles):
     for row in titles:
-        if row == name:
+        if title == name:
             return
 
-    writer.writerow([name, title])
+    writer.writerow([name, title, ups])

@@ -18,4 +18,17 @@ responce = json.loads(requests.get(url, headers = user_agent).text)
 
 # ------------------------------------------
 
-json_to_html(subreddit, sorting, responce)
+old_count = json_to_html(subreddit, sorting, responce)
+
+while True:
+	cont = input('Do you want to continue? y, n: ')
+	if cont == 'y':
+		new_url = url + '&after=' + responce['data']['after']
+		responce = json.loads(requests.get(new_url, headers = user_agent).text)
+		old_count = json_to_html(subreddit, sorting, responce, True, old_count)
+	elif cont == 'n':
+		print('Stopped')
+		break
+	else:
+		print('Invalid. Stopped')
+		break

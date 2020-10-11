@@ -3,15 +3,28 @@ import os
 import csv
 from functions import url_to_i_reddit_link, add_link_to_html_file, down_image, write_if_not_exist_in_csv, write_style, write_header
 
-def json_to_html(subreddit, sorting, json_data):
+def delete_span_fix(filename):
+    with open(filename, 'r') as f:
+        lines = f.readlines()
+    with open(filename, 'w') as f:
+        for line in lines:
+            if re.search('class=\"fix\"', line) == None:
+                f.write(line)
+
+def json_to_html(subreddit, sorting, json_data, cont = False, count = 0):
     regexp = '/[0-z\.]{5,20}\.(?:jpg|png)' # like '/jh234lkj32.jpg' or .png
     folder = subreddit + '-' + sorting
     if not os.path.exists('web/' + folder):
         os.makedirs('web/' + folder)
 
-    posts_file = open('web/' + folder + '.html', 'w', encoding='utf8', newline='\n')
-    write_style(posts_file)
-    write_header(posts_file, 'r/' + subreddit, sorting)
+    file = 'web/' + folder + '.html'
+    if cont == True:
+        delete_span_fix(file)
+        posts_file = open(file, 'a', encoding='utf8', newline='\n')
+    else:
+        posts_file = open(file, 'w', encoding='utf8', newline='\n')
+        write_style(posts_file)
+        write_header(posts_file, 'r/' + subreddit, sorting)
 
     if not os.path.exists('csv'):
         os.makedirs('csv')
@@ -24,10 +37,9 @@ def json_to_html(subreddit, sorting, json_data):
     titles = []
     for row in csv.reader(titles_r, delimiter='|'):
         try:
-            titles.append(row[0])
+            titles.append(row[1])
         except Exception as e: pass
 
-    count = 0
     for element in json_data['data']['children']:
         title = element['data']['title']
         ups = element['data']['ups']
@@ -42,7 +54,7 @@ def json_to_html(subreddit, sorting, json_data):
             continue
         jpg = jpg[0].replace('/', '')
 
-        write_if_not_exist_in_csv(jpg, title, title_writer, titles)
+        write_if_not_exist_in_csv(jpg, title, ups, title_writer, titles)
 
         link = url_to_i_reddit_link(jpg)
         down_image(link, 'web/' + folder, jpg)
@@ -61,3 +73,4 @@ def json_to_html(subreddit, sorting, json_data):
     posts_file.write('<span class="fix">'+ str(count) + ' posts</span>\n')
     posts_file.close()
     titles_w.close()
+    return count

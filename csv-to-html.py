@@ -16,9 +16,10 @@ count = 0
 title_reader = csv.reader(csv_file, delimiter='|')
 folder = subreddit + '-' + sorting
 for row in title_reader:
-    title = row[1]
     file = row[0]
-    add_link_to_html_file(title, '-', html_file, folder + '/' + file, folder + '/' + file)
+    title = row[1]
+    ups = row[2]
+    add_link_to_html_file(title, ups, html_file, folder + '/' + file, folder + '/' + file)
     count += 1
 
 html_file.write('<span class="fix">'+ str(count) + ' posts</span>\n')
