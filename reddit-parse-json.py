@@ -17,8 +17,8 @@ print('url: ', url)
 regexp = '/[0-z\.]{5,20}\.(?:jpg|png)' # like '/jh234lkj32.jpg' or .png
 
 folder = subreddit + '-' + sorting
-if not os.path.exists(folder):
-	os.makedirs(folder)
+if not os.path.exists('web/' + folder):
+	os.makedirs('web/' + folder)
 
 user_agent = {'User-agent': 'Mozilla/5.0'}
 memes = json.loads(requests.get(url, headers = user_agent).text)
@@ -27,17 +27,20 @@ memes = json.loads(requests.get(url, headers = user_agent).text)
 
 # ------------------------------------------
 
-posts_file = open(subreddit + '-' + sorting + '.html', 'w', encoding='utf8', newline='\n')
+posts_file = open('web/' + folder + '.html', 'w', encoding='utf8', newline='\n')
 write_style(posts_file)
 write_header(posts_file, 'r/' + subreddit, sorting)
 
-titles_file = open(folder + '-titles.csv', 'a', newline='\n')
-title_writer = csv.writer(titles_file, delimiter='|')
+if not os.path.exists('csv'):
+	os.makedirs('csv')
 
-csv_file = open(folder + '-titles.csv', 'r')
+titles_w = open('csv/' + folder + '-titles.csv', 'a', newline='\n')
+title_writer = csv.writer(titles_w, delimiter='|')
+
+titles_r = open('csv/' + folder + '-titles.csv', 'r')
 
 titles = []
-for row in csv.reader(csv_file, delimiter='|'):
+for row in csv.reader(titles_r, delimiter='|'):
 	try:
 		titles.append(row[0])
 	except Exception as e: pass
@@ -60,19 +63,19 @@ for element in memes['data']['children']:
 	write_if_not_exist_in_csv(jpg, title, title_writer, titles)
 
 	link = url_to_i_reddit_link(jpg)
-	down_image(link, folder, jpg)
+	down_image(link, 'web/' + folder, jpg)
 	add_link_to_html_file(title, ups, posts_file, folder + '/' + jpg, link)
 	count += 1
 	print('Download\t' + str(count), end='\r')
 
 print('Complete\t' + str(count))
 
-images = os.listdir(folder)
+# images = os.listdir(folder)
 
-for image in images:
+# for image in images:
 	# add_link_to_html_file()
-	pass
+	# pass
 
 posts_file.write('<span class="fix">'+ str(count) + ' posts</span>\n')
 posts_file.close()
-titles_file.close()
+titles_w.close()
