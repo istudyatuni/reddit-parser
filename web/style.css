@@ -29,3 +29,24 @@ a {
 .sub {
     color: #ff5700;
 }
+@media screen and (max-width: 800px) {
+    a, img, h2 {
+        margin-left: 0;
+    }
+    a {
+        font-size: 3em;
+        width: 100%;
+    }
+    body {
+        width: 100%;
+    }
+    .fix {
+        right: 1em;
+        font-size: 1.5em;
+    }
+}
+@media screen and (max-width: 1000px) {
+    a, img, h2 {
+        margin-left: 10%;
+    }
+}

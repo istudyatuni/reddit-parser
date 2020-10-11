@@ -3,7 +3,9 @@ import requests
 import shutil # to save image locally
 
 def write_style(file):
-    file.write('<link rel="stylesheet" href="style.css">\n')
+    a = '<meta content="width=device-width, initial-scale=1" name="viewport" />\n'
+    a += '<link rel="stylesheet" href="style.css">\n'
+    file.write(a)
 
 def write_header(file, sub, sort):
     a = '<h2><span class="sub">'+ sub + '</span> ' + sort + '</h2>'
